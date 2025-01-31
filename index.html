@@ -1,51 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chat with Llama</title>
-    <style>
-        body { font-family: Arial, sans-serif; }
-        #chat { margin-top: 20px; }
-        .user-msg { color: blue; }
-        .bot-msg { color: green; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ChatGPT Interaction</title>
 </head>
 <body>
-    <h1>Chat with Llama</h1>
-    <textarea id="user-input" rows="4" cols="50"></textarea><br><br>
-    <button onclick="sendMessage()">Send</button>
-    
-    <div id="chat"></div>
 
-    <script>
-        const apiKey = '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';  // Замените на свой API ключ
-        
-        async function sendMessageToChatGPT(message) {
-          const response = await fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${apiKey}`,
-            },
-            body: JSON.stringify({
-              model: 'gpt-3.5-turbo',  // или gpt-3.5, в зависимости от доступного
-              messages: [
-                { role: 'user', content: message },
-              ],
-            }),
-          });
-        
-          const data = await response.json();
-          return data.choices[0].message.content;
-        }
-        
-        sendMessageToChatGPT('Hello, ChatGPT! How are you?').then(response => {
-          console.log('Response from ChatGPT:', response);
-        }).catch(error => {
-          console.error('Error:', error);
-        });
+  <h1>ChatGPT Interaction</h1>
+  
+  <!-- Здесь будет выводиться ответ -->
+  <div id="response"></div>
 
-    </script>
+  <script>
+    const apiKey = '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';  // Замените на свой API ключ
+
+    async function sendMessageToChatGPT(message) {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${apiKey}`,
+        },
+        body: JSON.stringify({
+          model: 'gpt-3.5-turbo',  // или gpt-4, в зависимости от доступного
+          messages: [
+            { role: 'user', content: message },
+          ],
+        }),
+      });
+
+      const data = await response.json();
+      return data.choices[0].message.content;
+    }
+
+    // Вызовем функцию и отобразим результат на странице
+    sendMessageToChatGPT('Hello, ChatGPT! How are you?').then(response => {
+      // Найдем элемент с id="response" и вставим туда ответ
+      document.getElementById('response').textContent = 'Response from ChatGPT: ' + response;
+    }).catch(error => {
+      console.error('Error:', error);
+    });
+  </script>
+
 </body>
 </html>
