@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat with Llama</title>
+    <style>
+        body { font-family: Arial, sans-serif; }
+        #chat { margin-top: 20px; }
+        .user-msg { color: blue; }
+        .bot-msg { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Chat with Llama</h1>
+    <textarea id="user-input" rows="4" cols="50"></textarea><br><br>
+    <button onclick="sendMessage()">Send</button>
+    
+    <div id="chat"></div>
+
+    <script>
+        async function sendMessage() {
+            const userInput = document.getElementById('user-input').value;
+            const response = await fetch('/ask', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ input: userInput })
+            });
+            const data = await response.json();
+            displayMessage(userInput, data.response);
+        }
+
+        function displayMessage(userMessage, botResponse) {
+            const chatDiv = document.getElementById('chat');
+            chatDiv.innerHTML += `<p class="user-msg">You: ${userMessage}</p>`;
+            chatDiv.innerHTML += `<p class="bot-msg">Llama: ${botResponse}</p>`;
+        }
+    </script>
+</body>
+</html>
